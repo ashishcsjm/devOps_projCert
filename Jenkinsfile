@@ -1,28 +1,24 @@
-pipeline {
+pipeline { 
     agent any 
     stages {
         stage('Git Clone') {
             steps {
                 echo "checking out the repo from git"
-                git 'https://github.com/ashishcsjm/devOps_projCert.git'
+                git clone 'https://github.com/ashishcsjm/devOps_projCert.git'
             
             }
         }
-        stage('Docker build'){
-            steps {
-                echo "building Docker Image"
-                docker build -t ashishag2511/website:image$BUILD_NUMBER /var/lib/jenkins/workspace/devops_projCert
-            }
-        }
-        
-        stage('Deployment-Running Docker Container') {
-            steps {
+        stage('Docker build and deploy container'){
+            steps { 
                 script {
-                    echo "deployment"
-                    docker run -it -d -p 9091:80 ashishag2511/website:image$BUILD_NUMBER
+                    build job: 'docker_deployment' , parameters: [
+                        [$class: 'StringParameterValue', name: 'PARAM_PARENT_BUILD', value: ${BUILD_NUMBER}]
+                        ]
                 }
             }
         }
+        
+
      //   stage('publish html report') {
        //     steps{
          //       echo "publishing the html report"
