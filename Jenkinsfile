@@ -17,6 +17,21 @@ pipeline {
                 }
             }
         }
+        stage('Triggering Selenium Test Case'){
+            steps {
+                script {
+                   try {
+                    build job: 'selenium_test' , parameters: [
+                        [$class: 'StringParameterValue', name: 'PARAM_PARENT_BUILD', value: "${BUILD_NUMBER}"]
+                        ]
+                       }catch(err){
+                          build job: 'delete_docker_container' , parameters: [
+                        [$class: 'StringParameterValue', name: 'PARAM_PARENT_BUILD', value: "${BUILD_NUMBER}"]
+                        ]
+                          }
+                   }
+            }
+        }
         
 
      //   stage('publish html report') {
