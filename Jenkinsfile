@@ -12,7 +12,7 @@ pipeline {
             steps { 
                 script {
                     build job: 'docker_deployment' , parameters: [
-                        [$class: 'StringParameterValue', name: 'PARAM_PARENT_BUILD', value: ${BUILD_NUMBER}]
+                        [$class: 'StringParameterValue', name: 'PARAM_PARENT_BUILD', value: "${BUILD_NUMBER}"]
                         ]
                 }
             }
